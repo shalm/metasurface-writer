@@ -67,6 +67,7 @@ def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), prev
     past_pos= np.array([(pos[0],pos[1])])
     queue =[]
     queue.append((pos[0],pos[1]))
+    dict1={pos[0]:[pos[1]]}
     geometry_cell= generator_function(placement_function((pos[0], pos[1])))
     arr.append(gdspy.CellReference(geometry_cell, (pos[0], pos[1]), magnification=1))
     
@@ -93,34 +94,65 @@ def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), prev
         
         if pa:
             vec=(a[0] + current_pos[0], a[1]+current_pos[1])
-            # checks= (vec[0], vec[1]) not in past_pos
-            #fix
-            if not ([vec[0], vec[1]] in past_pos.tolist()):
-                past_pos=np.vstack((past_pos, [vec[0], vec[1]]))
+            if vec[0] in dict1.keys():
+                if vec[1] not in dict1[vec[0]]:
+                    x=dict1[vec[0]]
+                    x.append(vec[1])
+                    dict1.update({vec[0]:x})
+                    queue.append(vec)
+                    geometry_cell= generator_function(placement_function(vec))
+                    arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
+            else:
+                dict1.update({vec[0]:[vec[1]]})
                 queue.append(vec)
                 geometry_cell= generator_function(placement_function(vec))
                 arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
-            
+                    
         if na:
             vec=(-a[0] + current_pos[0], -a[1]+current_pos[1])
-            if not ([vec[0], vec[1]] in past_pos.tolist()):
-                past_pos=np.vstack((past_pos, [vec[0], vec[1]]))
+            if vec[0] in dict1.keys():
+                if vec[1] not in dict1[vec[0]]:
+                    x=dict1[vec[0]]
+                    x.append(vec[1])
+                    dict1.update({vec[0]:x})
+                    queue.append(vec)
+                    geometry_cell= generator_function(placement_function(vec))
+                    arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
+            else:
+                dict1.update({vec[0]:[vec[1]]})
                 queue.append(vec)
                 geometry_cell= generator_function(placement_function(vec))
                 arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
             
         if pb:
             vec=(b[0] + current_pos[0], b[1]+current_pos[1])
-            if not ([vec[0], vec[1]] in past_pos.tolist()):
-                past_pos=np.vstack((past_pos, [vec[0], vec[1]]))
+            if vec[0] in dict1.keys():
+                if vec[1] not in dict1[vec[0]]:                  
+                    x=dict1[vec[0]]
+                    x.append(vec[1])
+                    dict1.update({vec[0]:x})
+                    queue.append(vec)
+                    geometry_cell= generator_function(placement_function(vec))
+                    arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
+            else:
+                dict1.update({vec[0]:[vec[1]]})
                 queue.append(vec)
                 geometry_cell= generator_function(placement_function(vec))
                 arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
             
         if nb:
             vec=(-b[0] + current_pos[0], -b[1]+current_pos[1])
-            if not ([vec[0], vec[1]] in past_pos.tolist()):
-                past_pos=np.vstack((past_pos, [vec[0], vec[1]]))
+            if vec[0] in dict1.keys():
+                if vec[1] not in dict1[vec[0]]:
+                    x=dict1[vec[0]]
+                    x.append(vec[1])
+                    dict1.update({vec[0]:x})
+                    queue.append(vec)
+                    geometry_cell= generator_function(placement_function(vec))
+                    arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
+                    
+            else:
+                dict1.update({vec[0]:[vec[1]]})
                 queue.append(vec)
                 geometry_cell= generator_function(placement_function(vec))
                 arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
@@ -130,8 +162,8 @@ def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), prev
     return arr
     
 a=[1,0]
-b=[0,1]
-dim=(100, 100)
+b=[.5,math.sqrt(3)/2]
+dim=(300, 300)
 cells=posArrayGen(a,b,dim, g_f, p_f)
 
 gdspy.current_library = gdspy.GdsLibrary()
