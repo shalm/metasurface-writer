@@ -63,8 +63,7 @@ def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), prev
     '''
     #BFS or DP
     [dimX, dimY] = dim
-
-    past_pos= np.array([(pos[0],pos[1])])
+    
     queue =[]
     queue.append((pos[0],pos[1]))
     dict1={pos[0]:[pos[1]]}
@@ -73,10 +72,6 @@ def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), prev
     
     while (len(queue)>0):
         current_pos = queue[0]
-        # if current_pos not in past_pos:
-        #     past_pos.append(current_pos)
-            
-            # print(len(past_pos))
             
         pax=(a[0]+current_pos[0])<=dimX/2 and (a[0] + current_pos[0])>=-dimX/2
         pay=(a[1]+current_pos[1])<=dimY/2 and (a[1] + current_pos[1])>=-dimY/2
