@@ -82,43 +82,96 @@ def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), prev
 
     '''
     [dimX, dimY] = dim
-    pax=(a[0]+pos[0])<=dimX/2 and (a[0] + pos[0])>=-dimX/2
-    pay=(a[1]+pos[1])<=dimY/2 and (a[1] + pos[1])>=-dimY/2
-    pa=bool(pax*pay)
-    nax=(-a[0]+pos[0])<=dimX/2 and (-a[0] + pos[0])>=-dimX/2
-    nay=(-a[1]+pos[1])<=dimY/2 and (-a[1] + pos[1])>=-dimY/2
-    na=bool(nax*nay)
     
-    pbx=(b[0]+pos[0])<=dimX/2 and (b[0] + pos[0])>=-dimX/2
-    pby=(b[1]+pos[1])<=dimY/2 and (b[1] + pos[1])>=-dimY/2
-    pb=bool(pbx*pby)
-    nbx=(-b[0]+pos[0])<=dimX/2 and (-b[0] + pos[0])>=-dimX/2
-    nby=(-b[1]+pos[1])<=dimY/2 and (-b[1] + pos[1])>=-dimY/2
-    nb=bool(nbx*nby)
-
-    if (pos[0], pos[1]) in prev_pos:
-        return arr
-    
-    prev_pos.append((pos[0], pos[1]))
+    queue =[]
+    queue.append((pos[0],pos[1]))
+    dict1={pos[0]:[pos[1]]}
     geometry_cell= generator_function(placement_function((pos[0], pos[1])))
     arr.append(gdspy.CellReference(geometry_cell, (pos[0], pos[1]), magnification=1))
-
-    if pa:
-        vec=(a[0] + pos[0], a[1]+pos[1])
-        posArrayGen(a,b,dim, generator_function, placement_function, pos=vec, prevDir=(1,0), arr=arr, prev_pos=prev_pos)
     
-    if na:
-        vec=(-a[0] + pos[0], -a[1]+pos[1])
-        posArrayGen(a,b,dim, generator_function, placement_function, pos=vec, prevDir=(-1,0), arr=arr, prev_pos=prev_pos)
-
-    if pb:
-        vec=(b[0] + pos[0], b[1]+pos[1])
-        posArrayGen(a,b,dim, generator_function, placement_function, pos=vec, prevDir=(0,1), arr=arr, prev_pos=prev_pos)
-    
-    if nb:
-        vec=(-b[0] + pos[0], -b[1]+pos[1])
-        posArrayGen(a,b,dim, generator_function, placement_function, pos=vec, prevDir=(0,-1), arr=arr, prev_pos=prev_pos)
-   
+    while (len(queue)>0):
+        current_pos = queue[0]
+            
+        pax=(a[0]+current_pos[0])<=dimX/2 and (a[0] + current_pos[0])>=-dimX/2
+        pay=(a[1]+current_pos[1])<=dimY/2 and (a[1] + current_pos[1])>=-dimY/2
+        pa=bool(pax*pay)
+        nax=(-a[0]+current_pos[0])<=dimX/2 and (-a[0] + current_pos[0])>=-dimX/2
+        nay=(-a[1]+current_pos[1])<=dimY/2 and (-a[1] + current_pos[1])>=-dimY/2
+        na=bool(nax*nay)
+        
+        pbx=(b[0]+current_pos[0])<=dimX/2 and (b[0] + current_pos[0])>=-dimX/2
+        pby=(b[1]+current_pos[1])<=dimY/2 and (b[1] + current_pos[1])>=-dimY/2
+        pb=bool(pbx*pby)
+        nbx=(-b[0]+current_pos[0])<=dimX/2 and (-b[0] + current_pos[0])>=-dimX/2
+        nby=(-b[1]+current_pos[1])<=dimY/2 and (-b[1] +current_pos[1])>=-dimY/2
+        nb=bool(nbx*nby)
+        
+        if pa:
+            vec=(a[0] + current_pos[0], a[1]+current_pos[1])
+            if vec[0] in dict1.keys():
+                if vec[1] not in dict1[vec[0]]:
+                    x=dict1[vec[0]]
+                    x.append(vec[1])
+                    dict1.update({vec[0]:x})
+                    queue.append(vec)
+                    geometry_cell= generator_function(placement_function(vec))
+                    arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
+            else:
+                dict1.update({vec[0]:[vec[1]]})
+                queue.append(vec)
+                geometry_cell= generator_function(placement_function(vec))
+                arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
+                    
+        if na:
+            vec=(-a[0] + current_pos[0], -a[1]+current_pos[1])
+            if vec[0] in dict1.keys():
+                if vec[1] not in dict1[vec[0]]:
+                    x=dict1[vec[0]]
+                    x.append(vec[1])
+                    dict1.update({vec[0]:x})
+                    queue.append(vec)
+                    geometry_cell= generator_function(placement_function(vec))
+                    arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
+            else:
+                dict1.update({vec[0]:[vec[1]]})
+                queue.append(vec)
+                geometry_cell= generator_function(placement_function(vec))
+                arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
+            
+        if pb:
+            vec=(b[0] + current_pos[0], b[1]+current_pos[1])
+            if vec[0] in dict1.keys():
+                if vec[1] not in dict1[vec[0]]:                  
+                    x=dict1[vec[0]]
+                    x.append(vec[1])
+                    dict1.update({vec[0]:x})
+                    queue.append(vec)
+                    geometry_cell= generator_function(placement_function(vec))
+                    arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
+            else:
+                dict1.update({vec[0]:[vec[1]]})
+                queue.append(vec)
+                geometry_cell= generator_function(placement_function(vec))
+                arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
+            
+        if nb:
+            vec=(-b[0] + current_pos[0], -b[1]+current_pos[1])
+            if vec[0] in dict1.keys():
+                if vec[1] not in dict1[vec[0]]:
+                    x=dict1[vec[0]]
+                    x.append(vec[1])
+                    dict1.update({vec[0]:x})
+                    queue.append(vec)
+                    geometry_cell= generator_function(placement_function(vec))
+                    arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
+                    
+            else:
+                dict1.update({vec[0]:[vec[1]]})
+                queue.append(vec)
+                geometry_cell= generator_function(placement_function(vec))
+                arr.append(gdspy.CellReference(geometry_cell, vec, magnification=1))
+        # print(past_pos)
+        queue.pop(0)
     
     return arr
     
