@@ -49,7 +49,7 @@ def array_diffGeometries(Xs, Ys, reference_geometries):
             i += 1
     return array
 
-def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), prevDir= (0,0), arr=[], prev_pos=[]):
+def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), arr=[]):
     '''
     
 
@@ -67,11 +67,7 @@ def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), prev
         and returns a value that the generator_function takes in
     pos : tuple of the starting coordinates, optional
         The default is (0,0).
-    prevDir : tuple of the previous direction unit vector, optional
-        The default is (0,0).
     arr : an array of the placed geometries, optional
-        The default is [].
-    prev_pos : a list of the previously used coordinates, optional
         The default is [].
 
     Returns

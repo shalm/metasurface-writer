@@ -19,8 +19,10 @@ sys.setrecursionlimit(10**5)
 gdspy.current_library = gdspy.GdsLibrary()
 geometry1 = gdspy.Cell("CIRCLE")
 geometry1.add(gdspy.Round((0, 0), 72*nm, tolerance=0.001))
+
 geometry2 = gdspy.Cell("OVAL")
 geometry2.add(gdspy.Round((0, 0), [72*nm, 64*nm], tolerance=1e-4))
+
 def p_f(point):
     return np.sqrt(point[0]**2 + point[1]**2)
 def g_f(distance):
@@ -29,7 +31,7 @@ def g_f(distance):
     else:
         return geometry2
 
-def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), prevDir= (0,0), arr=[], prev_pos=[]):
+def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), arr=[]):
     '''
     
 
@@ -47,11 +49,7 @@ def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), prev
         and returns a value that the generator_function takes in
     pos : tuple of the starting coordinates, optional
         The default is (0,0).
-    prevDir : tuple of the previous direction unit vector, optional
-        The default is (0,0).
     arr : an array of the placed geometries, optional
-        The default is [].
-    prev_pos : a list of the previously used coordinates, optional
         The default is [].
 
     Returns
@@ -158,7 +156,7 @@ def posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), prev
     
 a=[1,0]
 b=[.5,math.sqrt(3)/2]
-dim=(300, 300)
+dim=(1000, 1000)
 cells=posArrayGen(a,b,dim, g_f, p_f)
 
 gdspy.current_library = gdspy.GdsLibrary()
@@ -166,5 +164,5 @@ gdspy.current_library = gdspy.GdsLibrary()
 Lens = gdspy.Cell("LENS")
 Lens.add(cells)
 gdspy.current_library.add(Lens)
-gdspy.write_gds('Testing41.gds')
+gdspy.write_gds('Testing42.gds')
 
