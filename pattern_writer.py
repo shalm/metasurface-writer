@@ -1,7 +1,6 @@
 #pattern_writer.py
 """This file holds the core engine for the metasurface writer, and associated helper functions"""
 import gdspy
-import numpy as np
 
 def array_singleReference(Xs, Ys, reference_geometry):
     '''

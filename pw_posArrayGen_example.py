@@ -19,8 +19,8 @@ gdspy.current_library = gdspy.GdsLibrary()
 geometry1 = gdspy.Cell("CIRCLE")
 geometry1.add(gdspy.Round((0, 0), 72*nm, tolerance=0.001))
 
-geometry2 = gdspy.Cell("OVAL")
-geometry2.add(gdspy.Round((0, 0), [72*nm, 64*nm], tolerance=1e-4))
+geometry2 = gdspy.Cell("RECTANGLE")
+geometry2.add(gdspy.Rectangle((0, 0), (200*nm, 400*nm)))
 
 def p_f(point):
     return np.sqrt(point[0]**2 + point[1]**2)
