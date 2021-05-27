@@ -58,7 +58,7 @@ gdspy.write_gds('Testing47.gds')
 The output layout can be seen in the figures below: 
 
 ![Figure [layout]: An example of a layout](layout_example.png width="300")
-![Figure [layout]: An example of a layout](layout_example_zoom.png width="300"))
+![Figure [layout2]: A zoomed in image of the layout above](layout_example_zoom.png width="300"))
 
 For more details on using gdspy on this see the gdspy documentation: https://github.com/heitzmann/gdspy
 
