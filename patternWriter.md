@@ -14,6 +14,33 @@ python setup.py install
 
 patternWriter uses gdspy
 
+
+### API Reference
+
+**array_singleReference(X_list, Y_list, reference_geometry)**
+Places the reference_geometry at each (x,y) coordinate.
+
+Parameters: 
+    X_list (list): List of x coordinates
+    Y_list (list): List of y coordinates
+    reference_geometry (gdspy cell): a gdspy geometry reference cell
+
+Returns:
+    array: an array of the geometry referenced at each (x,y) coordinate
+
+**array_diffGeometries(X_list, Y_list, reference_geometries)**
+Places the reference_geometries in order at each (x,y) coordinate.
+
+Parameters: 
+    X_list (list): List of x coordinates
+    Y_list (list): List of y coordinates
+    reference_geometries (list): a list of length X-list length times Y-list lenght of gdspy geometry reference cells
+
+Returns:
+    array: an array of the specific geometry referenced at each (x,y) coordinate
+
+**poArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), arr=[])**
+
 ### Basic Usage
 
 This demo creates a hexagonal layout with circles at a distance less than 25 and rectangles at all further points with the dimension 250 by 250.

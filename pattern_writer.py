@@ -2,12 +2,12 @@
 """This file holds the core engine for the metasurface writer, and associated helper functions"""
 import gdspy
 
-def array_singleReference(Xs, Ys, reference_geometry):
+def array_singleReference(X_list, Y_list, reference_geometry):
     '''
     Parameters
     ----------
-    Xs : List of x values
-    Ys : List of y values
+    X_list : List of x coordinates
+    Y_list : List of y coordinates
     reference_geometry : a geometry reference cell
 
     Returns
@@ -17,19 +17,19 @@ def array_singleReference(Xs, Ys, reference_geometry):
     '''
     
     array = []
-    for x in Xs:
-        for y in Ys:  
+    for x in X_list:
+        for y in Y_list:  
             array.append(gdspy.CellReference(
                 reference_geometry, (x, y), 
                 magnification=1))
     return array
       
-def array_diffGeometries(Xs, Ys, reference_geometries):
+def array_diffGeometries(X_list, Y_list, reference_geometries):
     '''
     Parameters
     ----------
-    Xs : List of x values
-    Ys : List of y values
+    X_list : List of x values
+    Y_list : List of y values
     reference_geometries : List of geometry reference cells (of length X*Y)
 
     Returns
@@ -40,8 +40,8 @@ def array_diffGeometries(Xs, Ys, reference_geometries):
     
     array = []
     i = 0
-    for x in Xs:
-        for y in Ys:  
+    for x in X_list:
+        for y in Y_list:  
             array.append(gdspy.CellReference(
                 reference_geometries[i], (x, y), 
                 magnification=1))
