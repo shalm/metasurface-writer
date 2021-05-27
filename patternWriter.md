@@ -56,9 +56,8 @@ gdspy.current_library.add(Lens)
 gdspy.write_gds('Testing47.gds')
 ```
 The output layout can be seen in the figures below: 
-
-![Figure [layout]: An example of a layout](layout_example.png)
-![Figure [layout2]: A zoomed in image of the layout above](layout_example_zoom.png))
+<img src="layout_example.png" alt="Layout Example" width="300"/>
+<img src="layout_example_zoom.png" alt="Zoom Layout Example" width="300"/>
 
 For more details on using gdspy on this see the gdspy documentation: https://github.com/heitzmann/gdspy
 
