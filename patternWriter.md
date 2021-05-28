@@ -51,6 +51,29 @@ Returns:
 
 **poArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), arr=[])**
 
+Creates a metasurface layout according to the parameters with geometric shapes at each point.
+
+Parameters:
+
+    a (tuple): First vector 
+
+    b (tuple): Second vector
+
+    dim (tuple): dimensions of the layout 
+
+    generator_function (function): a function that takes in the output 
+        of the placement function and returns a gdspy shape
+
+    placement_function (function): a function that takes in a point coordinate and returns a value that the generator_function takes in
+
+    pos (tuple): the starting coordinates, optional. The default is (0,0).
+
+    arr (array): an array of the placed geometries, optional. The default is [].
+
+Returns:
+
+    arr (array): an array of all geometries that have been placed on the layout
+
 ### Basic Usage
 
 This demo creates a hexagonal layout with circles at a distance less than 25 and rectangles at all further points with the dimension 250 by 250.
@@ -65,6 +88,7 @@ baseUnit = 1 #layout scale(microns)
 m=baseUnit*1e6 
 nm = m*1E-9
 
+#create gdspy geometry cells
 gdspy.current_library = gdspy.GdsLibrary()
 geometry1 = gdspy.Cell("CIRCLE")
 geometry1.add(gdspy.Round((0, 0), 72*nm, tolerance=0.001))
@@ -72,8 +96,11 @@ geometry1.add(gdspy.Round((0, 0), 72*nm, tolerance=0.001))
 geometry2 = gdspy.Cell("RECTANGLE")
 geometry2.add(gdspy.Rectangle((0, 0), (200*nm, 400*nm)))
 
+#set up a placement function
 def p_f(point):
     return np.sqrt(point[0]**2 + point[1]**2)
+
+#set up a generator function
 def g_f(distance):
     if distance < 25:
         return geometry1
@@ -83,10 +110,13 @@ def g_f(distance):
 a=[1,0]
 b=[.5,math.sqrt(3)/2]
 dim=(250, 250)
+
+#run the function
 cells=pw.posArrayGen(a,b,dim, g_f, p_f)
 
 gdspy.current_library = gdspy.GdsLibrary()
 
+#create a gds file with the layout
 Lens = gdspy.Cell("LENS")
 Lens.add(cells)
 gdspy.current_library.add(Lens)

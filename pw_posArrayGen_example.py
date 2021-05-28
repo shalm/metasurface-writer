@@ -15,6 +15,7 @@ baseUnit = 1 #layout scale(microns)
 m=baseUnit*1e6 
 nm = m*1E-9
 
+#create gdspy geometry cells
 gdspy.current_library = gdspy.GdsLibrary()
 geometry1 = gdspy.Cell("CIRCLE")
 geometry1.add(gdspy.Round((0, 0), 72*nm, tolerance=0.001))
@@ -22,8 +23,11 @@ geometry1.add(gdspy.Round((0, 0), 72*nm, tolerance=0.001))
 geometry2 = gdspy.Cell("RECTANGLE")
 geometry2.add(gdspy.Rectangle((0, 0), (200*nm, 400*nm)))
 
+#set up a placement function
 def p_f(point):
     return np.sqrt(point[0]**2 + point[1]**2)
+
+#set up a generator function
 def g_f(distance):
     if distance < 25:
         return geometry1
@@ -33,10 +37,13 @@ def g_f(distance):
 a=[1,0]
 b=[.5,math.sqrt(3)/2]
 dim=(250, 250)
+
+#run the function
 cells=pw.posArrayGen(a,b,dim, g_f, p_f)
 
 gdspy.current_library = gdspy.GdsLibrary()
 
+#create a gds file with the layout
 Lens = gdspy.Cell("LENS")
 Lens.add(cells)
 gdspy.current_library.add(Lens)
