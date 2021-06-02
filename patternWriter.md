@@ -59,7 +59,7 @@ Parameters:
 
     b (tuple): Second vector
 
-    dim (tuple): dimensions of the layout 
+    dim (tuple): dimensions of the boundaries of layout 
 
     generator_function (function): a function that takes in the output 
         of the placement function and returns a gdspy shape
