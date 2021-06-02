@@ -49,7 +49,7 @@ Returns:
 
     array: an array of the specific geometry referenced at each (x,y) coordinate
 
-**poArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), arr=[])**
+**posArrayGen(a,b,dim, generator_function, placement_function, pos=(0,0), arr=[])**
 
 Creates a metasurface layout according to the parameters with geometric shapes at each point.
 
